@@ -1,5 +1,6 @@
 package com.rapid7.poc.oauth.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,12 +12,24 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 
 public class Oauth2ResourceServerConfiguration {
 
-    private static final String RESOURCE_SERVER_RESOURCE_ID = "mjs-poc-resource-server";
+    //private static final String RESOURCE_SERVER_RESOURCE_ID = "mjs-poc-resource-server";
+    private static final String RESOURCE_SERVER_RESOURCE_ID = "app";
 
     @Configuration
     @EnableResourceServer
     protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+        
+        
+        @Value("${oauth.clientid}")
+        private String oauthClientId;
 
+        @Value("${oauth.clientsecret}")
+        private String oauthClientSecret;
+
+        @Value("${oauth.check.token.endpoint}")
+        private String oauthClientTokenEndpoint;
+        
+        
         /**
          * Use the remote token services in the Authorisation Server.
          * @return
@@ -24,11 +37,13 @@ public class Oauth2ResourceServerConfiguration {
         @Bean
         public ResourceServerTokenServices tokenService() {
            RemoteTokenServices tokenServices = new RemoteTokenServices();
-           tokenServices.setClientId("clientapp");
-           tokenServices.setClientSecret("123456");
-           tokenServices.setCheckTokenEndpointUrl("http://localhost:9099/oauth/check_token");
+           tokenServices.setClientId(oauthClientId);
+           tokenServices.setClientSecret(oauthClientSecret);
+           tokenServices.setCheckTokenEndpointUrl(oauthClientTokenEndpoint);
+           
            return tokenServices;
         }        
+        
         
         @Override
         public void configure(ResourceServerSecurityConfigurer resources) {
