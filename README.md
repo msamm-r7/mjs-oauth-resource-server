@@ -20,6 +20,10 @@ After the specified time period, the access_token will expire. Use the refresh_t
 
 Instead of using my own resource server, we can use [Spring's UAA](https://github.com/cloudfoundry/uaa) which can act as Auth and Token store for us.
 
+To run UAA (with DB Mysql based config) run:
+
+    ./gradlew -Dspring.profiles.active=mysql,default run
+
 ### Authorisation
 
 We're assuming we have a client (our app) registered. For this example i'm taking config that's pre-canned (in the DB or in the config under 'uaa/src/main//webapp/WEB-INF/spring/oauth-clients.xml'.
@@ -69,7 +73,16 @@ This in turn, gives us an error:
 
 {"error":"access_denied","error_description":"Invalid token does not contain resource id (mjs-poc-resource-server)"}
 
-So it seems the resourceId in the credential store must back our resource servers resource request. so amending 'Oauth2ResourceServerConfiguration.RESOURCE_SERVER_RESOURCE_ID' to 'app' (so it maches the client ID in the pre-configured UAA db) fixed it:
+To enable us to use the client credentials (e.g. 'X') for an additional resource amend the DB (UAA schema, oauth_client_details.authorities and oauth_client_details.scope), with suitable elements such as 'X.read'.
+
+### Using UAA REST API
 
 
-  
+
+### Additional Resources with UAA
+
+[See here for UAA info.](https://github.com/cloudfoundry/uaa/blob/master/docs/UAA-Security.md#uaa-resources)
+
+
+
+ 

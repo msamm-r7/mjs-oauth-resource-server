@@ -12,8 +12,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 
 public class Oauth2ResourceServerConfiguration {
 
-    //private static final String RESOURCE_SERVER_RESOURCE_ID = "mjs-poc-resource-server";
-    private static final String RESOURCE_SERVER_RESOURCE_ID = "app";
+    private static final String RESOURCE_SERVER_RESOURCE_ID = "mjs-poc-resource-server";
 
     @Configuration
     @EnableResourceServer
